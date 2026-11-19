@@ -1,11 +1,13 @@
 using UnityEngine;
-using TMPro; // Si usas Text (Legacy), cambia TMP_Text por Text y quita using TMPro;
+using UnityEngine.SceneManagement;
+using TMPro;
 
 public class GameManager : MonoBehaviour
 {
     public static GameManager Instance;
 
-    [Header("Interfaz de Usuario")]
+    [Header("Referencias de Juego")]
+    public Transform player;
     public TMP_Text scoreText;
     public TMP_Text highScoreText;
 
@@ -14,11 +16,17 @@ public class GameManager : MonoBehaviour
     public float maxSpeed = 14f;
     public float speedIncreasePerPoint = 0.15f;
 
+    [Header("Bucle de Juego (Game Loop)")]
+    public float fallDeathOffsetY = 12f;
+    public float restartDelay = 0.35f;
+
     public int Score { get; private set; }
     public int HighScore { get; private set; }
     public float CurrentMoveSpeed => Mathf.Min(baseSpeed + (Score * speedIncreasePerPoint), maxSpeed);
 
     private const string HighScoreKey = "Helix3D_HighScore";
+    private float highestYReached;
+    private bool isGameOver;
 
     void Awake()
     {
@@ -29,8 +37,34 @@ public class GameManager : MonoBehaviour
         UpdateUI();
     }
 
+    void Start()
+    {
+        if (player != null)
+        {
+            highestYReached = player.position.y;
+        }
+    }
+
+    void Update()
+    {
+        if (isGameOver || player == null) return;
+
+        if (player.position.y > highestYReached)
+        {
+            highestYReached = player.position.y;
+        }
+
+        // Si el jugador cae mucho por debajo de su punto más alto, reinicia el ciclo
+        if (player.position.y < highestYReached - fallDeathOffsetY)
+        {
+            TriggerGameOver();
+        }
+    }
+
     public void AddScore(int amount = 1)
     {
+        if (isGameOver) return;
+
         Score += Mathf.Max(1, amount);
 
         if (Score > HighScore)
@@ -41,6 +75,21 @@ public class GameManager : MonoBehaviour
         }
 
         UpdateUI();
+    }
+
+    public void TriggerGameOver()
+    {
+        if (isGameOver) return;
+        isGameOver = true;
+
+        PlayerPrefs.Save();
+        Invoke(nameof(RestartCurrentScene), restartDelay);
+    }
+
+    private void RestartCurrentScene()
+    {
+        Scene currentScene = SceneManager.GetActiveScene();
+        SceneManager.LoadScene(currentScene.name);
     }
 
     private void UpdateUI()
