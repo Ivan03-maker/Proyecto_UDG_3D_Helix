@@ -694,13 +694,13 @@ MonoBehaviour:
   player: {fileID: 1460750034}
   scoreText: {fileID: 1556640113}
   highScoreText: {fileID: 1234865624}
-  baseSpeed: 8
+  baseSpeed: 6
   maxSpeed: 14
-  speedIncreasePerPoint: 0.15
+  speedIncreasePerPoint: 0.2
   fallDeathOffsetY: 12
   restartDelay: 0.35
   advanceToNextLevel: 1
-  scoreToAdvanceLevel: 15
+  scoreToAdvanceLevel: 10
   nextLevelSceneName: Level2Scene
   levelText: {fileID: 1776166661}
   levelLabel: Nivel 1
