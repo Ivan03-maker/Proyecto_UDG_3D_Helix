@@ -20,6 +20,15 @@ public class GameManager : MonoBehaviour
     public float fallDeathOffsetY = 12f;
     public float restartDelay = 0.35f;
 
+    [Header("Transición de Nivel")]
+    public bool advanceToNextLevel = true;
+    public int scoreToAdvanceLevel = 15;
+    public string nextLevelSceneName = "Level2Scene";
+
+    [Header("Indicador de Nivel")]
+    public TMP_Text levelText;
+    public string levelLabel = "Nivel 1";
+
     public int Score { get; private set; }
     public int HighScore { get; private set; }
     public float CurrentMoveSpeed => Mathf.Min(baseSpeed + (Score * speedIncreasePerPoint), maxSpeed);
@@ -35,6 +44,7 @@ public class GameManager : MonoBehaviour
 
         HighScore = PlayerPrefs.GetInt(HighScoreKey, 0);
         UpdateUI();
+        UpdateLevelUI();
     }
 
     void Start()
@@ -43,6 +53,7 @@ public class GameManager : MonoBehaviour
         {
             highestYReached = player.position.y;
         }
+        UpdateLevelUI();
     }
 
     void Update()
@@ -54,10 +65,18 @@ public class GameManager : MonoBehaviour
             highestYReached = player.position.y;
         }
 
-        // Si el jugador cae mucho por debajo de su punto más alto, reinicia el ciclo
+        // Si el jugador cae mucho por debajo de su última altura segura, reinicia el ciclo
         if (player.position.y < highestYReached - fallDeathOffsetY)
         {
             TriggerGameOver();
+        }
+    }
+
+    public void RegisterSafeHeight(float newY)
+    {
+        if (newY > highestYReached || Mathf.Abs(highestYReached - newY) > fallDeathOffsetY * 0.5f)
+        {
+            highestYReached = newY;
         }
     }
 
@@ -75,6 +94,13 @@ public class GameManager : MonoBehaviour
         }
 
         UpdateUI();
+
+        if (advanceToNextLevel && !string.IsNullOrWhiteSpace(nextLevelSceneName) && Score >= scoreToAdvanceLevel)
+        {
+            isGameOver = true;
+            PlayerPrefs.Save();
+            SceneManager.LoadScene(nextLevelSceneName);
+        }
     }
 
     public void TriggerGameOver()
@@ -96,5 +122,13 @@ public class GameManager : MonoBehaviour
     {
         if (scoreText != null) scoreText.text = $"Score: {Score}";
         if (highScoreText != null) highScoreText.text = $"Best: {HighScore}";
+    }
+
+    private void UpdateLevelUI()
+    {
+        if (levelText != null && !string.IsNullOrWhiteSpace(levelLabel))
+        {
+            levelText.text = levelLabel;
+        }
     }
 }
