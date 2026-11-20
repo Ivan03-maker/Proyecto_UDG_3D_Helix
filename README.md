@@ -21,10 +21,12 @@ Videojuego tridimensional tipo *helix* desarrollado en **Unity** como proyecto f
 
 ## Controles y cómo jugar
 
-1. Abre el juego desde **`MainMenuScene`** (o ejecuta el `.exe` compilado de Windows).
-2. Usa las teclas de movimiento horizontal/vertical o flechas (`Horizontal` / `Vertical`) para guiar la esfera entre plataformas.
-3. Aterriza en plataformas para sumar puntos y alcanzar la racha que activa el impulso de velocidad y el `Trail Renderer`.
-4. Supera el puntaje requerido para avanzar de **Nivel 1** a **Nivel 2** y **Nivel 3**, o usa el botón **Menú** para volver al inicio.
+1. Entra a la pestaña **Releases** del repositorio y descarga el archivo `.zip` correspondiente a la versión publicada (por ejemplo, `v1.0.0`).
+2. Extrae todo el contenido del `.zip` en una carpeta de tu equipo en Windows (conservando el `.exe` junto con su carpeta de datos asociada).
+3. Ejecuta el archivo `.exe` para jugar directamente sin necesidad de abrir Unity Editor.
+4. Usa las teclas de movimiento horizontal/vertical o flechas (`Horizontal` / `Vertical`) para guiar la esfera entre plataformas.
+5. Aterriza en plataformas para sumar puntos y alcanzar la racha que activa el impulso de velocidad y el `Trail Renderer`.
+6. Supera el puntaje requerido para avanzar de **Nivel 1** a **Nivel 2** y **Nivel 3**, o usa el botón **Menú** para volver al inicio.
 
 ## Autor
 
